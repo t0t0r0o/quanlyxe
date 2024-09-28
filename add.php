@@ -10,6 +10,7 @@
 </head>
 
 <body>
+<?php include('menu.php')?>
     <h2>
         <p class="text-center fs-1 bg-success">Thêm xe cho thuê</p>
     </h2>

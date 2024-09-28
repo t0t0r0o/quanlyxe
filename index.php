@@ -18,6 +18,7 @@ $sql = "SELECT * FROM bikes WHERE availability = 1"; // Lấy các xe còn có s
 $result = $conn->query($sql);
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,51 +28,55 @@ $result = $conn->query($sql);
     <title>Dashboard</title>
 </head>
 <body>
+    <?php include('menu.php'); ?>
 
-<h1>Thuê xe đạp</h1>
+    <div class="container mt-5">
+        <h1>Thuê xe đạp</h1>
 
-<?php if (isset($_SESSION['username'])): ?>
-    <p>Chào mừng, <?php echo $_SESSION['username']; ?>! Bạn đang đăng nhập với <?php echo $_SESSION['role']; ?>.</p>
-<?php else: ?>
-    <p>Bạn chưa đăng nhập. <a href="login.php">Đăng nhập</a> để thuê xe.</p>
-<?php endif; ?>
-
-<h2>Danh sách xe</h2>
-
-<table class="table" border="1">
-    <tr>
-        <th>ID</th>
-        <th>Loại</th>
-        <th>Mô tả</th>
-        <th>Giá thuê</th>
-        <th>Giá cọc</th>
-        <?php if (isset($_SESSION['user_id'])): // Chỉ hiển thị nếu người dùng đã đăng nhập ?>
-            <th>Hành động</th>
+        <?php if (isset($_SESSION['username'])): ?>
+            <p>Chào mừng, <?php echo htmlspecialchars($_SESSION['username']); ?>! Bạn đang đăng nhập với vai trò <?php echo htmlspecialchars($_SESSION['role']); ?>.</p>
+        <?php else: ?>
+            <p>Bạn chưa đăng nhập. <a href="login.php">Đăng nhập</a> để thuê xe.</p>
         <?php endif; ?>
-    </tr>
 
-    <?php if ($result->num_rows > 0): ?>
-        <?php while ($bike = $result->fetch_assoc()): ?>
-            <tr>
-                <td><?php echo $bike['bike_id']; ?></td>
-                <td><?php echo $bike['bike_type']; ?></td>
-                <td><?php echo $bike['description']; ?></td>
-                <td><?php echo $bike['rental_price']; ?></td>
-                <td><?php echo $bike['deposit']; ?></td>
-                <?php if (isset($_SESSION['user_id'])): ?>
-                    <td><a href='rent_bike.php?bike_id=<?php echo $bike['bike_id']; ?>'>Thuê</a></td>
+        <h2>Danh sách xe</h2>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Loại</th>
+                    <th>Mô tả</th>
+                    <th>Giá thuê</th>
+                    <th>Giá cọc</th>
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <th>Hành động</th>
+                    <?php endif; ?>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if ($result->num_rows > 0): ?>
+                    <?php while ($bike = $result->fetch_assoc()): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($bike['bike_id']); ?></td>
+                            <td><?php echo htmlspecialchars($bike['bike_type']); ?></td>
+                            <td><?php echo htmlspecialchars($bike['description']); ?></td>
+                            <td><?php echo htmlspecialchars($bike['rental_price']); ?> VNĐ</td>
+                            <td><?php echo htmlspecialchars($bike['deposit']); ?> VNĐ</td>
+                            <?php if (isset($_SESSION['user_id'])): ?>
+                                <td><a href='rent_bike.php?bike_id=<?php echo $bike['bike_id']; ?>' class='btn btn-primary'>Thuê</a></td>
+                            <?php endif; ?>
+                        </tr>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <tr><td colspan="5">Không có xe nào.</td></tr>
                 <?php endif; ?>
-            </tr>
-        <?php endwhile; ?>
-    <?php else: ?>
-        <tr><td colspan="5">Không có xe.</td></tr>
-    <?php endif; ?>
-</table>
+            </tbody>
+        </table>
+    </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
 </html>
 
 <?php

@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql = "SELECT * FROM users WHERE username = '$username'";
     $result = $conn->query($sql);
 
-    if ($result->num_rows > 0) {
+    if ($result && $result->num_rows > 0) {
         $user = $result->fetch_assoc();
 
         // Kiểm tra mật khẩu
@@ -32,14 +32,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['username'] = $user['username'];
             $_SESSION['role'] = $user['role'];
 
-            echo "Login successful!";
-            header("Location: dashboard.php"); // Chuyển hướng đến trang dashboard sau khi đăng nhập
+            // Chuyển hướng dựa trên vai trò người dùng
+            if ($user['role'] == 'manager') {
+                header("Location: quanlyxe.php"); 
+            } elseif ($user['role'] == 'staff') {
+                header("Location: confirm_orders.php");
+            } else {
+                header("Location: index.php");
+            }
             exit();
         } else {
-            echo "Invalid password.";
+            $error = "Invalid password.";
         }
     } else {
-        echo "No user found with that username.";
+        $error = "No user found with that username.";
     }
 }
 
@@ -48,29 +54,39 @@ $conn->close();
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Đăng Nhập</title>
 </head>
-<body>
+<body class="container mt-5">
 
-<h1>Login</h1>
+<h1>Đăng Nhập</h1>
+
+<?php if (isset($error)): ?>
+    <div class="alert alert-danger" role="alert">
+        <?php echo htmlspecialchars($error); ?>
+    </div>
+<?php endif; ?>
 
 <form method="POST" action="login.php">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required><br><br>
+    <div class="mb-3">
+        <label for="username" class="form-label">Tên đăng nhập:</label>
+        <input type="text" id="username" name="username" class="form-control" required>
+    </div>
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required><br><br>
+    <div class="mb-3">
+        <label for="password" class="form-label">Mật khẩu:</label>
+        <input type="password" id="password" name="password" class="form-control" required>
+    </div>
 
-    <button type="submit">Login</button>
+    <button type="submit" class="btn btn-primary">Đăng Nhập</button>
 </form>
 
+<p class="mt-3">Bạn chưa có tài khoản? <a href="register.php">Đăng ký ngay</a></p> <!-- Thêm đường dẫn đến trang đăng ký -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
 </html>

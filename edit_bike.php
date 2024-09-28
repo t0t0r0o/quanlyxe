@@ -6,7 +6,7 @@
     $deposit = (float) $_POST['deposit'];
     $availability = isset($_POST['availability']) ? 1 : 0; 
 
-    $conn = mysqli_connect('localhost', 'root', '', 'quanlyxe','3306');
+    $conn = mysqli_connect('localhost', 'root', 'Tru*ng0512', 'quanlyxe','3306');
     if(!$conn){
         die("Kết nối không thành công");
     }

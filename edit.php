@@ -8,6 +8,7 @@
     <title>Document</title>
 </head>
 <body>
+<?php include('menu.php')?>
     <h2><p class="text-center fs-1 bg-success">Sữa dữ liệu xe cho thuê</p></h2>
     <?php
         $masoxe = $_GET['id'];
