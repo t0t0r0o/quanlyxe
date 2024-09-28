@@ -2,6 +2,8 @@
 session_start(); // Bắt đầu phiên làm việc
 // Giả sử bạn đã lưu vai trò người dùng trong session
 $userRole = $_SESSION['role'] ?? 'customer'; // Mặc định là customer nếu không có vai trò
+
+error_reporting(0);
 ?>
 
 <!DOCTYPE html>
@@ -40,6 +42,9 @@ $userRole = $_SESSION['role'] ?? 'customer'; // Mặc định là customer nếu
                             <a class="nav-link" href="logout.php">Đăng xuất</a>
                         </li>
                     <?php elseif ($userRole == 'manager'): ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/quanlyxe.php">Quản lý xe</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/invoice.php">Hóa đơn</a>
                         </li>

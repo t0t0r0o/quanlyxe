@@ -26,6 +26,7 @@ $sql = "SELECT rentals.rental_id, rentals.user_id, rentals.bike_id, rentals.docu
         JOIN users ON rentals.user_id = users.user_id 
         JOIN bikes ON rentals.bike_id = bikes.bike_id 
         WHERE rentals.status = 'ongoing'";
+
 $result = $conn->query($sql);
 ?>
 

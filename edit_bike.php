@@ -1,4 +1,12 @@
 <?php
+
+// Kiểm tra xem người dùng có phải là nhân viên không
+session_start();
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'manager') {
+    echo "Access denied. Only staff can access this page.";
+    exit();
+}
+
     $bike_id  = $_POST['bike_id'];
     $bike_type  = $_POST['bike_type'];
     $description  = $_POST['description'];
@@ -15,7 +23,6 @@
             SET bike_type = '$bike_type', description = '$description', rental_price = $rental_price, deposit = $deposit, availability = $availability 
             WHERE bike_id = $bike_id";
     $result = mysqli_query($conn,$sql);
-
     if($result>0)
     {
         header('location:quanlyxe.php');

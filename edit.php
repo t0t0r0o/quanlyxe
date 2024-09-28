@@ -1,3 +1,13 @@
+<?php
+// Kiểm tra xem người dùng có phải là nhân viên không
+session_start();
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'manager') {
+    echo "Access denied. Only staff can access this page.";
+    exit();
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,10 +19,9 @@
 </head>
 <body>
 <?php include('menu.php')?>
-    <h2><p class="text-center fs-1 bg-success">Sữa dữ liệu xe cho thuê</p></h2>
     <?php
-        $masoxe = $_GET['id'];
-        $conn = mysqli_connect('localhost', 'root', '', 'quanlyxe','3306');
+        $masoxe = $_GET['bike_id'];
+        $conn = mysqli_connect('localhost', 'root', 'Tru*ng0512', 'quanlyxe','3306');
         if(!$conn){
             die("Kết nối không thành công");
         }
@@ -35,6 +44,7 @@
     ?>
     <main class="container">
         <form action ="edit_bike.php" method="post">
+            <input type="hidden" class="form-control" id="bike_id" name="bike_id" value="<?php echo $bike_id;  ?>">
             <div class="mb-3">
                 <label for="bike_type" class="form-label">Loại xe</label>
                 <input type="text" class="form-control" id="bike_type" name="bike_type" value="<?php echo $bike_type;  ?>">

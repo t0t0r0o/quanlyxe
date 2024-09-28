@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 // Kết nối đến cơ sở dữ liệu
 $servername = "localhost";
